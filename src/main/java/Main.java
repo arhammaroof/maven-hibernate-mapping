@@ -1,18 +1,17 @@
-import InheritanceMapping.Module;
-import InheritanceMapping.Project;
-import InheritanceMapping.Task;
-import ManyToMany.Delegates;
 import ManyToMany.Event;
-import ManyToOne.College;
-import ManyToOne.Student;
-import OneToOne.Person;
+import ManyToMany.Result;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.query.Query;
 
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-import javax.persistence.Query;
+import javax.persistence.*;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.ParameterExpression;
+import javax.persistence.criteria.Root;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Main {
     public static void main(String args[]){
@@ -23,7 +22,7 @@ public class Main {
         entityManager.getTransaction().begin();
 
 
-        //type code here
+
 //        OneToOne.PersonDetails alexDetail = new OneToOne.PersonDetails();
 //        alexDetail.setIncome(23451.21);
 //        alexDetail.setJob("Accountant");
@@ -101,11 +100,67 @@ public class Main {
 //        entityManager.persist(event3);
 //        entityManager.getTransaction().commit();
 //        entityManagerFactory.close();
-        Query query = entityManager.createQuery("select p from Person p");
-        ArrayList<Person> lists = new ArrayList();
-        lists = (ArrayList<Person>) query.getResultList();
-        lists.forEach(results-> {
-            System.out.println(results.getPersonName() + " ");
-        });
+
+//        Query query = entityManager.createQuery("select p.personName from Person p");
+//        ArrayList<String> lists = new ArrayList();
+//        lists = (ArrayList<String>) query.getResultList();
+//        lists.forEach(results-> {
+//            System.out.println(results.toString() + " ");
+//        };
+
+        /**
+         * query to get all the fields of a record
+         * queries are stored as a String in createQuery method
+         * we can use list of our objects(i.e Event in our case )to retrieve all the records from a table into Our object list.
+         */
+
+//        Query query = entityManager.createQuery("select e from Event e");
+//
+//        ArrayList<Event> lists= (ArrayList<Event>) query.getResultList();
+//        lists.forEach(results-> {
+//            System.out.println(results.getEventName() + " " + results.getDelegateName());
+//        });
+
+
+        /**
+         * query to pick particular fields from different tables.
+         * We need to make a parametrized constructor in our Entity class to hand pick the fields we'd like to retrieve from the table
+         * for instance we can make a constructor in our Event class that takes only the event name.
+         * we can the write hql/jpql using the new keyword to create abject according to our desired result. (in this case create an Event object with parametrized constructor which takes event name as argument)
+         * If we want to retrieve multiple tables from the database we can create a custom class which does not need to be an entity class and create a constructor having parameters of our desired fields
+         * In the code below we have Used Result class to retrieve event name and delegate name from event and delegate table.
+         */
+//        Query query = entityManager.createQuery("select new ManyToMany.Result(e.eventName, d.delegateName)" + "from Event e, Delegates d");
+//
+//        ArrayList<Result> lists= (ArrayList<Result>) query.getResultList();
+//        lists.forEach(results-> {
+//            System.out.println(results.getEventName() + " " + results.getDelegateName());
+//        });
+
+        /**
+         * Criteria Builder Query
+         * These are used when we want to build a dynamic query based on filters user fills at runtime.
+         * Since it detects the error at compile time. Runtime query error can not occur.
+         * The CriteriaBuilder interface serves as the main factory of criteria queries and criteria query elements.
+         * It can be obtained either by the EntityManagerFactory's getCriteriaBuilder method or by the EntityManager's getCriteriaBuilder method (both methods are equivalent).
+         * Root instance is created to define range variable in the FROM clause.
+         * The ParameterExpression instance, p, is created to represent the query parameter. The where method sets the WHERE clause.
+         * Criteria Builder has this range of methods for comparison in the where clause(in our case, cb.equal() is used)
+         * A CriteriaQuery instance is equivalent to a JPQL string and not to a TypedQuery instance.
+         * Therefore, running the query still requires a TypedQuery instance
+         * Therefore, running the query still requires a TypedQuery instance
+         */
+//        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+//        CriteriaQuery<Event> q = cb.createQuery(Event.class);
+//        Root<Event> c = q.from(Event.class);
+//        ParameterExpression<Integer> p = cb.parameter(Integer.class);
+//        q.select(c).where(cb.equal(c.get("eventId"), 35));
+//
+//        TypedQuery<Event> query = entityManager.createQuery(q);
+//        List<Event> results = query.getResultList();
+//        results.forEach(result->{
+//            System.out.println(result.getEventName() + " "  + result.getEventId());
+//        });
+
     }
 }

@@ -30,7 +30,7 @@ public class Person {
 
     /**
      *cascade is used to cascade the insertion deletion and updation of a record
-     *Fetch is used to fetch the joined table record. Eager Fetch to get it with the current table. Late to get it seperately
+     *Fetch is used to fetch the joined table record. Eager Fetch to get it with the current table. Lazy to get it seperately
      * @JoinColumn annotation is used to define the relationship we are creating on which field.
      */
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)

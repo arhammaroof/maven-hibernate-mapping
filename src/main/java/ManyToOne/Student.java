@@ -27,6 +27,9 @@ public class Student {
     }
 
     @ManyToOne
+    /**
+     * join column identifies the column we want to create the relationship with. (in our case Students have a many to one relationship with College. hence, college_id is used.)
+     */
     @JoinColumn(name = "college_id")
     public College getCollege() {
         return college;
