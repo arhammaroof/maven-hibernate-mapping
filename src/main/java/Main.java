@@ -1,8 +1,7 @@
 import ManyToMany.Event;
-import ManyToMany.Result;
+import ManyToOne.Result;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.query.Query;
 
 
 import javax.persistence.*;
@@ -51,20 +50,20 @@ public class Main {
 //        entityManager.persist(s2);
 
 //        Project project = new Project();
-////        project.setProjectName("Hibernate Lessons");
-////
-////        Module module = new Module();
-////        module.setProjectName("Spring Lessons");
-////        module.setModuleName("AOP");
-////
-////        Task task = new Task();
-////        task.setProjectName("Java lessons");
-////        task.setModuleName("Collections");
-////        task.setTaskName("ArrayList");
-////
-////        entityManager.persist(project);
-////        entityManager.persist(module);
-////        entityManager.persist(task);
+//        project.setProjectName("Hibernate Lessons");
+//
+//        Module module = new Module();
+//        module.setProjectName("Spring Lessons");
+//        module.setModuleName("AOP");
+//
+//        Task task = new Task();
+//        task.setProjectName("Java lessons");
+//        task.setModuleName("Collections");
+//        task.setTaskName("ArrayList");
+//
+//        entityManager.persist(project);
+//        entityManager.persist(module);
+//        entityManager.persist(task);
 
 //        Delegates delegate1 = new Delegates();
 //        delegate1.setDelegateName("Alex Rod");
@@ -146,10 +145,9 @@ public class Main {
          * Root instance is created to define range variable in the FROM clause.
          * The ParameterExpression instance, p, is created to represent the query parameter. The where method sets the WHERE clause.
          * Criteria Builder has this range of methods for comparison in the where clause(in our case, cb.equal() is used)
-         * A CriteriaQuery instance is equivalent to a JPQL string and not to a TypedQuery instance.
-         * Therefore, running the query still requires a TypedQuery instance
-         * Therefore, running the query still requires a TypedQuery instance
+         * Criteria query requires typedQuery instance for running because when we Create a CrtiteriaQuery we need to mention the type of object it is going to return
          */
+
 //        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
 //        CriteriaQuery<Event> q = cb.createQuery(Event.class);
 //        Root<Event> c = q.from(Event.class);
@@ -161,6 +159,16 @@ public class Main {
 //        results.forEach(result->{
 //            System.out.println(result.getEventName() + " "  + result.getEventId());
 //        });
+
+
+        //Joining through HQL
+//        Query query = entityManager.createQuery("select new ManyToOne.Result(c.collegeName, s.studentName)" + "from College c inner join Student s on s.college.collegeId = c.collegeId");
+//        ArrayList<Result> lists = (ArrayList<Result> ) query.getResultList();
+//        lists.forEach(results-> {
+//            System.out.println(results.getCollegeName()+ " " + results.getStudentName());
+//        });
+        //Joining through Criteria Api
+
 
     }
 }
