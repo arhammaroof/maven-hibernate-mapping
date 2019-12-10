@@ -1,26 +1,26 @@
 import ManyToMany.Event;
-import ManyToOne.Result;
+import ManyToOne.College;
+import ManyToOne.Student;
+import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Projection;
+import org.hibernate.criterion.Projections;
 
 
 import javax.persistence.*;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.ParameterExpression;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.*;
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Main {
-    public static void main(String args[]){
+    public static void main(String args[]) {
 
 
         EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("org.hibernate.tutorial.jpa");
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         entityManager.getTransaction().begin();
-
-
 
 //        OneToOne.PersonDetails alexDetail = new OneToOne.PersonDetails();
 //        alexDetail.setIncome(23451.21);
@@ -97,8 +97,7 @@ public class Main {
 //        entityManager.persist(event1);
 //        entityManager.persist(event2);
 //        entityManager.persist(event3);
-//        entityManager.getTransaction().commit();
-//        entityManagerFactory.close();
+
 
 //        Query query = entityManager.createQuery("select p.personName from Person p");
 //        ArrayList<String> lists = new ArrayList();
@@ -161,14 +160,98 @@ public class Main {
 //        });
 
 
-        //Joining through HQL
-//        Query query = entityManager.createQuery("select new ManyToOne.Result(c.collegeName, s.studentName)" + "from College c inner join Student s on s.college.collegeId = c.collegeId");
+        /**
+         * Joining through HQL
+         */
+
+//       Query query = entityManager.createQuery("select new ManyToOne.Result(c.collegeName, s.studentName)" + "from College c inner join Student s on s.college.collegeId = c.collegeId");
 //        ArrayList<Result> lists = (ArrayList<Result> ) query.getResultList();
 //        lists.forEach(results-> {
 //            System.out.println(results.getCollegeName()+ " " + results.getStudentName());
 //        });
-        //Joining through Criteria Api
+        /**
+         * Joining through Criteria Api
+         */
+//        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+//        CriteriaQuery<College> query = cb.createQuery(College.class);
+//        Root<Student> student = query.from(Student.class);
+//        Join<Student, College> college = student.join("college");
+//        query.select(college);
+//
+//        List<College> results = entityManager.createQuery(query).getResultList();
+//        for (College college1 : results) {
+//            System.out.println(college1.toString());
+//        }
 
+        /**
+         * Criteria multiselect example
+         */
+//        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+//        CriteriaQuery<Object[]> criteriaQuery = builder.createQuery(Object[].class);
+//        Root<College> rootCol = criteriaQuery.from(College.class);
+//        Root<Student> rootStu = criteriaQuery.from(Student.class);
+//        criteriaQuery.multiselect(rootCol,rootStu);
+//        criteriaQuery.where(builder.equal(rootStu.get("college"), rootCol.get("collegeId")));
+//        Query<Object[]> query = (Query<Object[]>) entityManager.createQuery(criteriaQuery);
+//        List<Object[]> lists = query.getResultList();
+//        for(Object[] objects: lists){
+//            College college = (College) objects[0];
+//            System.out.println(college.getCollegeName()+ " " );
+//            Student student = (Student) objects[1];
+//            System.out.println(student.getStudentName());
+//        }
+        /**
+         * projection example.
+         */
+//        Session session = (Session) entityManager.getDelegate();
+//        Criteria criteria = session.createCriteria(Event.class);
+//        criteria.setProjection(Projections.property("eventName"));
+//        List<String> list1 = criteria.list();
+//        for (String s: list1){
+//            System.out.println("Event name == " + s);
+//        }
 
+        /**
+         * Projection through JPA
+         * Using JPQL
+         */
+//        Query query = entityManager.createQuery("Select name from Product");
+//        List<String> resultList = query.getResultList();
+//        System.out.println(resultList);
+
+        /**
+         * Using criteria builder
+         */
+//        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+//        CriteriaQuery<String> query = builder.createQuery(String.class);
+//        Root<Product> product = query.from(Product.class);
+//        query.select(product.get("name"));
+//        List<String> resultList = entityManager.createQuery(query).getResultList();
+//
+//        System.out.println(resultList);
+
+        /**
+         * Multi-Column projection JPQL
+         */
+//        Query query = entityManager.createQuery("select productId, name, Description from Product");
+//        List resultList = query.getResultList();
+
+        /**
+         * Multi Column projection Criteria builder
+         */
+//        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+//        CriteriaQuery<Product> query = builder.createQuery(Product.class);
+//        Root<Product> product = query.from(Product.class);
+//        query.multiselect(product.get("productId"), product.get("name"), product.get("Description"));
+//        List<Product> resultList = entityManager.createQuery(query).getResultList();
+//        System.out.println(resultList);
+//        for(Object[] objects: resultList){
+//           long productid = (long) objects[0];
+//           String name = (String) objects[1];
+//           String description = (String) objects[2];
+//            System.out.println(productid + "\t" + name + "\t" + description);
+//        }
+        entityManager.getTransaction().commit();
+        entityManagerFactory.close();
     }
 }
